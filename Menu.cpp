@@ -1,27 +1,24 @@
+#include "Menu.h"
+#include "RecommendationSystem.h"
 #include <iostream>
 #include <string>
-#define RESET "\033[0m"          // Reset to default color
-#define LIGHT_GRAY "\033[37m"    // Light gray for less important text
-#define WHITE "\033[97m"         // White for main text
-#define BOLD "\033[1m"           // Bold text
-#define DIM "\033[2m"            // Dimmed text for subtle options
-#define BLUE "\033[94m"   
+#include <map>
+#include <limits>
+
 using namespace std;
 
-// Function to display the menu
+RecommendationSystem recommendationSystem;
+
 void showMenu() {
     cout << "===== Menu =====" << endl;
-    cout << "1. Create friendship" << endl;
-    cout << "2. Add content" << endl;
-    cout << "3. Add interest to a user" << endl;
-    cout << "4. Adult content?" << endl;
-    cout << "5. Age" << endl;
-    cout << "6. View recommendations" << endl;
-    cout << "7. Add user" << endl;
-    cout << "8. Exit" << endl;
+    cout << "1. Add user" << endl;
+    cout << "2. Create friendship" << endl;
+    cout << "3. Add content" << endl;
+    cout << "4. Add content to a user" << endl;
+    cout << "5. View recommendations" << endl;
+    cout << "6. Exit" << endl;
     cout << "Select an option: ";
 }
-
 
 void handleMenu() {
     int option;
@@ -29,51 +26,73 @@ void handleMenu() {
 
     do {
         showMenu();
-        cin >> option;
+        while (!(cin >> option)) {
+            cout << "Invalid input. Please enter a number between 1 and 6." << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            showMenu();
+        }
         cin.ignore(); 
 
         switch (option) {
-            case 1:
-                cout << "Option selected: Create friendship" << endl;
-                cout << "Enter the name of the friend: ";
-                getline(cin, inputString); 
-                cout << "Friendship created with: " << inputString << endl;
-                break;
-            case 2:
-                cout << "Option selected: Add content" << endl;
-                cout << "Enter the content: ";
-                getline(cin, inputString); 
-                cout << "Content added: " << inputString << endl;
-                break;
-            case 3:
-                cout << "Option selected: Add interest to a user" << endl;
-                cout << "Enter the interest: ";
-                getline(cin, inputString); 
-                cout << "Interest added: " << inputString << endl;
-                break;
-            case 4:
-                cout << "Option selected: Adult content?" << endl;
-                cout << "Enter 'yes' or 'no': ";
-                getline(cin, inputString); 
-                cout << "Your input: " << inputString << endl;
-                break;
-            case 5:
-                cout << "Option selected: Age" << endl;
-                cout << "Enter your age: ";
-                getline(cin, inputString); 
-                cout << "Your age is: " << inputString << endl;
-                break;
-            case 6:
-                cout << "Option selected: View recommendations" << endl;
-                
-                break;
-            case 7:
+            case 1: {
                 cout << "Option selected: Add user" << endl;
                 cout << "Enter the name of the new user: ";
-                getline(cin, inputString); 
+                getline(cin, inputString);
+                recommendationSystem.addUser(inputString, {});
                 cout << "User added: " << inputString << endl;
                 break;
-            case 8:
+            }
+            case 2: {
+                cout << "Option selected: Create friendship" << endl;
+                cout << "Enter the name of the first friend: ";
+                getline(cin, inputString);
+                string friend1 = inputString;
+                cout << "Enter the name of the second friend: ";
+                getline(cin, inputString);
+                string friend2 = inputString;
+                recommendationSystem.addFriend(friend1, friend2);
+                cout << "Friendship created between: " << friend1 << " and " << friend2 << endl;
+                break;
+            }
+            case 3: {
+                cout << "Option selected: Add content" << endl;
+                cout << "Enter the category: ";
+                getline(cin, inputString);
+                string category = inputString;
+                cout << "Enter the content: ";
+                getline(cin, inputString);
+                recommendationSystem.addContent(category, inputString);
+                cout << "Content added to category " << category << ": " << inputString << endl;
+                break;
+            }
+            case 4: {
+                cout << "Option selected: Add content to a user" << endl;
+                cout << "Enter the user name: ";
+                getline(cin, inputString);
+                string userName = inputString;
+                cout << "Enter the category: ";
+                getline(cin, inputString);
+                string category = inputString;
+                cout << "Enter the content: ";
+                getline(cin, inputString);
+                recommendationSystem.addContent(category, inputString);
+                recommendationSystem.addInterestToUser(userName, category, 1);
+                cout << "Content added to user " << userName << " in category " << category << ": " << inputString << endl;
+                break;
+            }
+            case 5: {
+                cout << "Option selected: View recommendations" << endl;
+                cout << "Enter the user name: ";
+                getline(cin, inputString);
+                vector<string> recommendations = recommendationSystem.recommendContent(inputString);
+                cout << "Recommendations for " << inputString << ":" << endl;
+                for (const string& recommendation : recommendations) {
+                    cout << recommendation << endl;
+                }
+                break;
+            }
+            case 6:
                 cout << "Exiting the program..." << endl;
                 break;
             default:
@@ -81,5 +100,5 @@ void handleMenu() {
         }
 
         cout << endl; 
-    } while (option != 8);
+    } while (option != 6);
 }

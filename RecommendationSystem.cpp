@@ -2,7 +2,11 @@
 
 // Add a user to the system
 void RecommendationSystem::addUser(const std::string& userName, const std::map<std::string, int>& categories) {
-    userManager.addUser(userName, categories);
+    try {
+        userManager.addUser(userName, categories);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
 }
 
 // Add content to a specific category
@@ -14,6 +18,15 @@ void RecommendationSystem::addContent(const std::string& category, const std::st
 // Add a friendship connection between two users
 void RecommendationSystem::addFriend(const std::string& user1, const std::string& user2) {
     userGraph.addEdge(user1, user2); // Delegate to Graph
+}
+
+// Add interest to a user
+void RecommendationSystem::addInterestToUser(const std::string& userName, const std::string& category, int value) {
+    try {
+        userManager.addInterest(userName, category, value);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
 }
 
 // Recommend content for a user based on friends' interests
@@ -37,14 +50,30 @@ std::vector<std::string> RecommendationSystem::recommendContent(const std::strin
     }
 
     // Gather recommended content based on friends' interests
-    std::vector<std::string> recommendations;
+    std::unordered_set<std::string> userContent;
+    try {
+        const auto& userInterests = userManager.getInterests(userId);
+        for (const auto& [category, value] : userInterests) {
+            if (contentManager.categories.find(category) != contentManager.categories.end()) {
+                for (const std::string& content : contentManager.categories[category]) {
+                    userContent.insert(content);
+                }
+            }
+        }
+    } catch (const std::runtime_error&) {
+        // Ignore if user does not exist
+    }
+
+    std::unordered_set<std::string> recommendationsSet;
     for (const std::string& category : aggregatedInterests) {
         if (contentManager.categories.find(category) != contentManager.categories.end()) {
             for (const std::string& content : contentManager.categories[category]) {
-                recommendations.push_back(content);
+                if (userContent.find(content) == userContent.end()) {
+                    recommendationsSet.insert(content);
+                }
             }
         }
     }
 
-    return recommendations;
+    return std::vector<std::string>(recommendationsSet.begin(), recommendationsSet.end());
 }
