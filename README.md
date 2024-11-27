@@ -1,6 +1,6 @@
-# Sistema de Recomendación de Contenidos
+# Content Recommendation System
 
-Este programa es un sistema de recomendación de contenidos que permite a los usuarios agregar contenido, crear amistades y recibir recomendaciones basadas en sus intereses y las categorías de contenido disponibles.
+This program is a content recommendation system that allows users to add content, create friendships, and receive recommendations based on their interests and the available content categories.
 
 Welcome to the Exam! Youtube video:
 
