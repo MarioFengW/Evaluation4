@@ -1,4 +1,6 @@
-# Project Title
+# Sistema de Recomendación de Contenidos
+
+Este programa es un sistema de recomendación de contenidos que permite a los usuarios agregar contenido, crear amistades y recibir recomendaciones basadas en sus intereses y las categorías de contenido disponibles.
 
 Welcome to the Exam! Youtube video:
 
