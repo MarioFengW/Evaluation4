@@ -17,10 +17,12 @@ public:
     void addFriend(const std::string& user1, const std::string& user2);
     void addInterestToUser(const std::string& userName, const std::string& category, int value);
     std::vector<std::string> recommendContent(const std::string& userId);
+    const std::map<std::string, int>& getUserInterests(const std::string& userName) const;
+
+    ContentManager contentManager; // Make this public
 
 private:
     UserManager userManager;
-    ContentManager contentManager;
     Graph userGraph;
 };
 
