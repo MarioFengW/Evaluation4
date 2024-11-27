@@ -7,8 +7,6 @@ void ContentManager::addContent(const string& category) {
         cout << "Category " << category << " created.\n";
         categories[category] = vector<string>(); //initialize empty content vector
     }
-    cout << "Add content: ";
-    cin >> contentToStore;
     categories[category].push_back(contentToStore);
     /*cout << "Is this adult content? (Y/N): ";
         cin >> adultValidation;
