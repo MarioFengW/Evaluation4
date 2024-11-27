@@ -1,6 +1,6 @@
-#include "Menu.cpp"
+#include "Menu.h"
 
 int main() {
-    handleMenu(); // Launch the interactive menu
+    handleMenu();
     return 0;
 }
