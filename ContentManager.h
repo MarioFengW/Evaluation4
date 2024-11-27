@@ -19,7 +19,6 @@ class ContentManager {
 public:
     unordered_map<string, vector<string>> categories;
     //vector<string> adultContent;
-private:
     void addContent(const string& category);
     void getContentByCategory(const string& category);
 };
