@@ -77,3 +77,8 @@ std::vector<std::string> RecommendationSystem::recommendContent(const std::strin
 
     return std::vector<std::string>(recommendationsSet.begin(), recommendationsSet.end());
 }
+
+// Get interests of a user
+const std::map<std::string, int>& RecommendationSystem::getUserInterests(const std::string& userName) const {
+    return userManager.getInterests(userName);
+}
