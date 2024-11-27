@@ -2,24 +2,23 @@
 
 using namespace std;
 
-void Graph::addEdge(int user1, int user2) {
-    // Relación de amistad es bidireccional
+void Graph::addEdge(const string& user1, const string& user2) {
     adjList[user1].push_back(user2);
-    adjList[user2].push_back(user1); 
+    adjList[user2].push_back(user1); // La relación de amistad es bidireccional
 }
 
-unordered_set<int> Graph::bfs(int startUser) {
-    unordered_set<int> visited;
-    queue<int> q;
+unordered_set<string> Graph::bfs(const string& startUser) {
+    unordered_set<string> visited;
+    queue<string> q;
 
     visited.insert(startUser);
     q.push(startUser);
 
     while (!q.empty()) {
-        int user = q.front();
+        string user = q.front();
         q.pop();
 
-        for (int friendUser : adjList[user]) {
+        for (const string& friendUser : adjList[user]) {
             if (visited.find(friendUser) == visited.end()) {
                 visited.insert(friendUser);
                 q.push(friendUser);

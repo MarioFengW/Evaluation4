@@ -1,7 +1,7 @@
 #include "RecommendationSystem.h"
 
 // Add a user to the system
-void RecommendationSystem::addUser(const std::string& userName, std::map<std::string, int>& categories) {
+void RecommendationSystem::addUser(const std::string& userName, const std::map<std::string, int>& categories) {
     userManager.addUser(userName, categories);
 }
 
@@ -12,21 +12,20 @@ void RecommendationSystem::addContent(const std::string& category, const std::st
 }
 
 // Add a friendship connection between two users
-void RecommendationSystem::addFriend(int user1, int user2) {
+void RecommendationSystem::addFriend(const std::string& user1, const std::string& user2) {
     userGraph.addEdge(user1, user2); // Delegate to Graph
 }
 
 // Recommend content for a user based on friends' interests
-std::vector<std::string> RecommendationSystem::recommendContent(int userId) {
+std::vector<std::string> RecommendationSystem::recommendContent(const std::string& userId) {
     // Get all friends of the user using BFS
-    std::unordered_set<int> friends = userGraph.bfs(userId);
+    std::unordered_set<std::string> friends = userGraph.bfs(userId);
 
     // Aggregate interests of all friends
     std::set<std::string> aggregatedInterests;
-    for (int friendId : friends) {
-        User friendUser = {std::to_string(friendId)};
+    for (const std::string& friendId : friends) {
         try {
-            const auto& interests = userManager.getInterests(friendUser);
+            const auto& interests = userManager.getInterests(friendId);
             for (const auto& [category, value] : interests) {
                 if (value > 0) { // Consider interests with positive values
                     aggregatedInterests.insert(category);

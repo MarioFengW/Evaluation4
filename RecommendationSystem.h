@@ -1,28 +1,28 @@
 #pragma once
 
+#ifndef RECOMMENDATIONSYSTEM_H
+#define RECOMMENDATIONSYSTEM_H
+
+#include <string>
+#include <vector>
+#include <unordered_set>
+#include <map>
+#include <set>
 #include "UserManager.h"
 #include "ContentManager.h"
 #include "Graph.h"
-#include <set>
-#include <vector>
-#include <string>
 
 class RecommendationSystem {
+public:
+    void addUser(const std::string& userName, const std::map<std::string, int>& categories);
+    void addContent(const std::string& category, const std::string& content);
+    void addFriend(const std::string& user1, const std::string& user2);
+    std::vector<std::string> recommendContent(const std::string& userId);
+
 private:
     UserManager userManager;
     ContentManager contentManager;
     Graph userGraph;
-
-public:
-    // Add a user to the system
-    void addUser(const std::string& userName, std::map<std::string, int>& categories);
-
-    // Add content to a specific category
-    void addContent(const std::string& category, const std::string& content);
-
-    // Add a friendship connection between two users
-    void addFriend(int user1, int user2);
-
-    // Recommend content for a user based on friends' interests
-    std::vector<std::string> recommendContent(int userId);
 };
+
+#endif // RECOMMENDATIONSYSTEM_H
